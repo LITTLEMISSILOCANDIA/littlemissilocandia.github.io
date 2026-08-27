@@ -597,11 +597,11 @@ const sheetURL =
 
 async function updateLeaderboard(){
 
-    try{
+    try {
 
         const response = await fetch(sheetURL + "&t=" + Date.now());
 
-        if(!response.ok){
+        if (!response.ok) {
             throw new Error("Unable to access Google Sheet");
         }
 
@@ -611,46 +611,55 @@ async function updateLeaderboard(){
 
         let totals = {};
 
-        // Start all 15 candidates at zero
-        for(let i = 1; i <= 15; i++){
+        // 15 candidates start at 0
+        for (let i = 1; i <= 15; i++) {
             totals[i] = 0;
         }
 
-        // Read every submitted vote
-        for(let i = 1; i < rows.length; i++){
+        // READ GOOGLE SHEET
+        for (let i = 1; i < rows.length; i++) {
 
-            // Handles commas inside fields
-            const columns = rows[i].split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+            // Correctly handle commas inside Google Sheet fields
+            const columns = rows[i].match(
+                /(".*?"|[^",]+)(?=\s*,|\s*$)/g
+            );
 
-            if(columns.length < 5) continue;
+            if (!columns || columns.length < 5) continue;
 
             const candidateText =
-                columns[1].replace(/^"|"$/g,"").trim();
+                columns[1]
+                .replace(/^"|"$/g, "")
+                .trim();
 
             const numberOfVotes =
                 parseInt(
-                    columns[4].replace(/^"|"$/g,"").trim()
+                    columns[4]
+                    .replace(/^"|"$/g, "")
+                    .trim()
                 ) || 0;
 
             const match =
                 candidateText.match(/Candidate\s*#(\d+)/i);
 
-            if(!match) continue;
+            if (!match) continue;
 
             const candidateNumber =
                 parseInt(match[1]);
 
-            if(candidateNumber >= 1 && candidateNumber <= 15){
+            if (
+                candidateNumber >= 1 &&
+                candidateNumber <= 15
+            ) {
 
                 totals[candidateNumber] += numberOfVotes;
 
             }
         }
 
-        // Create ranking
+        // CREATE RANKING
         let ranking = [];
 
-        for(let i = 1; i <= 15; i++){
+        for (let i = 1; i <= 15; i++) {
 
             ranking.push({
                 number: i,
@@ -660,45 +669,42 @@ async function updateLeaderboard(){
 
         }
 
-        ranking.sort(function(a,b){
-
+        ranking.sort(function(a, b) {
             return b.votes - a.votes;
-
         });
 
 
         // TOP 3
         let topHTML = "";
 
-        ranking.slice(0,3).forEach(function(candidate,index){
+        ranking.slice(0, 3).forEach(function(candidate, index) {
 
             let medal = "🏅";
 
-            if(index === 0) medal = "🥇";
-            if(index === 1) medal = "🥈";
-            if(index === 2) medal = "🥉";
+            if (index === 0) medal = "🥇";
+            if (index === 1) medal = "🥈";
+            if (index === 2) medal = "🥉";
 
             topHTML += `
-            <div class="top-card">
+                <div class="top-card">
+                    <div class="medal">${medal}</div>
 
-                <div class="medal">${medal}</div>
+                    <div class="rank-number">
+                        TOP ${index + 1}
+                    </div>
 
-                <div class="rank-number">
-                    TOP ${index + 1}
+                    <div class="top-name">
+                        Candidate #${candidate.number}
+                        <br>
+                        ${candidate.name}
+                    </div>
+
+                    <div class="top-votes">
+                        ${candidate.votes} votes
+                    </div>
                 </div>
-
-                <div class="top-name">
-                    Candidate #${candidate.number}
-                    <br>
-                    ${candidate.name}
-                </div>
-
-                <div class="top-votes">
-                    ${candidate.votes} votes
-                </div>
-
-            </div>
             `;
+
         });
 
         document.getElementById("top3").innerHTML =
@@ -708,61 +714,63 @@ async function updateLeaderboard(){
         // FULL LEADERBOARD
         let html = "";
 
-        ranking.forEach(function(candidate,index){
+        ranking.forEach(function(candidate, index) {
 
             let medal = "🏅";
 
-            if(index === 0) medal = "🥇";
-            else if(index === 1) medal = "🥈";
-            else if(index === 2) medal = "🥉";
+            if (index === 0) medal = "🥇";
+            else if (index === 1) medal = "🥈";
+            else if (index === 2) medal = "🥉";
 
             let className = "rank";
 
-            if(index === 0){
+            if (index === 0) {
                 className += " top-one";
             }
 
             html += `
-            <div class="${className}">
-
-                ${medal}
-                ${index + 1}.
-                Candidate #${candidate.number}
-                — ${candidate.name}
-                —
-                <strong>${candidate.votes} votes</strong>
-
-            </div>
+                <div class="${className}">
+                    ${medal}
+                    ${index + 1}.
+                    Candidate #${candidate.number}
+                    — ${candidate.name}
+                    —
+                    <strong>${candidate.votes} votes</strong>
+                </div>
             `;
+
         });
 
         document.getElementById("leaderboardList").innerHTML =
             html;
 
 
-        // UPDATE EACH CANDIDATE'S VOTE DISPLAY
-        for(let i = 1; i <= 15; i++){
+        // UPDATE CANDIDATE CARDS
+        for (let i = 1; i <= 15; i++) {
 
             const element =
                 document.getElementById("votes" + i);
 
-            if(element){
-
-                element.textContent =
-                    totals[i];
-
+            if (element) {
+                element.textContent = totals[i];
             }
+
         }
 
+    }
 
-    }catch(error){
+    catch (error) {
 
-        console.error(error);
+        console.error(
+            "Unable to load voting results:",
+            error
+        );
 
         document.getElementById("leaderboardList").innerHTML =
             "<p style='text-align:center;color:#d81b60;'>Unable to load latest voting results.</p>";
 
     }
+
 }
 
 </script>
