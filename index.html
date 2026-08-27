@@ -945,6 +945,11 @@ async function updateLeaderboard(){
     }
 
 }
+    updateLeaderboard();
+
+setInterval(function(){
+    updateLeaderboard();
+}, 5000);
 
 </script>
 
