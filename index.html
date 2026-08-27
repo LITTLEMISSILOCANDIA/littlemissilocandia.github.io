@@ -4,6 +4,61 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Little Miss Ilocandia 2026 - Online Voting</title>
+    .countdown-box{
+    margin:25px auto 10px;
+    max-width:700px;
+    padding:25px;
+    background:white;
+    border-radius:20px;
+    box-shadow:0 8px 25px rgba(0,0,0,.12);
+    border:2px solid #f1c6df;
+}
+
+.countdown-box h3{
+    margin:0 0 18px;
+    color:#7b1fa2;
+    font-size:22px;
+}
+
+#countdown{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+}
+
+#countdown div{
+    background:linear-gradient(135deg,#d81b60,#7b1fa2);
+    color:white;
+    padding:15px 8px;
+    border-radius:15px;
+}
+
+#countdown span{
+    display:block;
+    font-size:32px;
+    font-weight:bold;
+}
+
+#countdown small{
+    font-size:11px;
+    font-weight:bold;
+}
+
+#countdownMessage{
+    margin:18px 0 0;
+    font-weight:bold;
+    color:#d81b60;
+}
+
+@media(max-width:600px){
+    #countdown{
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    #countdown span{
+        font-size:26px;
+    }
+}
 
 <style>
 *{
@@ -981,6 +1036,72 @@ async function updateLeaderboard(){
 setInterval(function(){
     updateLeaderboard();
 }, 5000);
+    const votingStart = new Date("September 1, 2026 12:00:00").getTime();
+const votingEnd = new Date("November 7, 2026 12:00:00").getTime();
+
+function updateCountdown() {
+
+    const now = new Date().getTime();
+
+    if (now < votingStart) {
+
+        document.getElementById("countdownMessage").textContent =
+            "Voting starts on September 1, 2026.";
+
+        document.getElementById("days").textContent = "0";
+        document.getElementById("hours").textContent = "0";
+        document.getElementById("minutes").textContent = "0";
+        document.getElementById("seconds").textContent = "0";
+
+        return;
+    }
+
+    if (now >= votingEnd) {
+
+        document.getElementById("countdownMessage").textContent =
+            "🔒 VOTING IS NOW CLOSED";
+
+        document.getElementById("days").textContent = "0";
+        document.getElementById("hours").textContent = "0";
+        document.getElementById("minutes").textContent = "0";
+        document.getElementById("seconds").textContent = "0";
+
+        return;
+    }
+
+    const distance = votingEnd - now;
+
+    const days = Math.floor(
+        distance / (1000 * 60 * 60 * 24)
+    );
+
+    const hours = Math.floor(
+        (distance % (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+    );
+
+    const minutes = Math.floor(
+        (distance % (1000 * 60 * 60)) /
+        (1000 * 60)
+    );
+
+    const seconds = Math.floor(
+        (distance % (1000 * 60)) /
+        1000
+    );
+
+    document.getElementById("days").textContent = days;
+    document.getElementById("hours").textContent = hours;
+    document.getElementById("minutes").textContent = minutes;
+    document.getElementById("seconds").textContent = seconds;
+
+    document.getElementById("countdownMessage").textContent =
+        "Voting ends on November 7, 2026 at 12:00 PM";
+}
+
+updateCountdown();
+
+setInterval(updateCountdown, 1000);
 
 </script>
 
