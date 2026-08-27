@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,27 +7,127 @@
 
 <style>
 *{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#fff5fb,#f3e8ff);color:#333}
-header{background:linear-gradient(135deg,#6a1b9a,#d81b60);color:white;text-align:center;padding:40px 15px}
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#fff5fb,#f3e8ff);
+color:#333
+}
+
+header{
+background:linear-gradient(135deg,#6a1b9a,#d81b60);
+color:white;
+text-align:center;
+padding:40px 15px
+}
+
 header h1{margin:0;font-size:34px}
 header p{font-size:20px;font-weight:bold}
+
 .welcome{text-align:center;padding:25px}
 .welcome h2{color:#7b1fa2}
-#candidates{max-width:1200px;margin:auto;padding:10px 20px 40px;display:grid;grid-template-columns:repeat(3,1fr);gap:25px}
-.candidate{background:white;border-radius:20px;padding:20px;text-align:center;box-shadow:0 8px 25px rgba(0,0,0,.15);border:2px solid #f1c6df}
-.candidate h2{color:#7b1fa2;font-size:20px;margin-bottom:5px}
-.location{color:#d81b60;font-weight:bold}
-.photo{width:100%;height:300px;background:#eee;border-radius:15px;margin:15px 0;overflow:hidden}
-.photo img{width:100%;height:100%;object-fit:cover;display:block}
+
+#candidates{
+max-width:1200px;
+margin:auto;
+padding:10px 20px 40px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:25px
+}
+
+.candidate{
+background:white;
+border-radius:20px;
+padding:20px;
+text-align:center;
+box-shadow:0 8px 25px rgba(0,0,0,.15);
+border:2px solid #f1c6df
+}
+
+.candidate h2{
+color:#7b1fa2;
+font-size:20px;
+margin-bottom:5px
+}
+
+.location{
+color:#d81b60;
+font-weight:bold
+}
+
+.photo{
+width:100%;
+height:300px;
+background:#eee;
+border-radius:15px;
+margin:15px 0;
+overflow:hidden
+}
+
+.photo img{
+width:100%;
+height:100%;
+object-fit:cover;
+display:block
+}
+
 .votes{font-size:17px}
-.votes strong{color:#d81b60;font-size:22px}
-button{width:100%;border:none;padding:14px;border-radius:30px;background:linear-gradient(135deg,#d81b60,#7b1fa2);color:white;font-size:17px;font-weight:bold;cursor:pointer}
-.leaderboard{max-width:900px;margin:20px auto 50px;background:white;padding:30px;border-radius:20px;box-shadow:0 8px 25px rgba(0,0,0,.15)}
-.leaderboard h2{text-align:center;color:#7b1fa2}
-.rank{background:#fafafa;padding:15px;margin:10px 0;border-radius:10px;font-weight:bold}
-footer{background:#6a1b9a;color:white;text-align:center;padding:25px}
-@media(max-width:900px){#candidates{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:600px){#candidates{grid-template-columns:1fr}}
+
+.votes strong{
+color:#d81b60;
+font-size:22px
+}
+
+button{
+width:100%;
+border:none;
+padding:14px;
+border-radius:30px;
+background:linear-gradient(135deg,#d81b60,#7b1fa2);
+color:white;
+font-size:17px;
+font-weight:bold;
+cursor:pointer
+}
+
+.leaderboard{
+max-width:900px;
+margin:20px auto 50px;
+background:white;
+padding:30px;
+border-radius:20px;
+box-shadow:0 8px 25px rgba(0,0,0,.15)
+}
+
+.leaderboard h2{
+text-align:center;
+color:#7b1fa2
+}
+
+.rank{
+background:#fafafa;
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+font-weight:bold
+}
+
+footer{
+background:#6a1b9a;
+color:white;
+text-align:center;
+padding:25px
+}
+
+@media(max-width:900px){
+#candidates{grid-template-columns:repeat(2,1fr)}
+}
+
+@media(max-width:600px){
+#candidates{grid-template-columns:1fr}
+}
 </style>
 </head>
 
@@ -45,7 +145,120 @@ footer{background:#6a1b9a;color:white;text-align:center;padding:25px}
 </section>
 
 <section id="candidates">
-    <div class="candidate">
+
+<div class="candidate">
+<h2>#1 LEONOR TAMBAN</h2>
+<p class="location">ILOCOS NORTE</p>
+<div class="photo"><img src="candidate1.jpg" alt="Leonor Tamban"></div>
+<p class="votes">Votes: <strong id="votes1">0</strong></p>
+<button onclick="vote(1)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#2 VANESSA CASTILLO</h2>
+<p class="location">ILOCOS SUR</p>
+<div class="photo"><img src="candidate2.jpg" alt="Vanessa Castillo"></div>
+<p class="votes">Votes: <strong id="votes2">0</strong></p>
+<button onclick="vote(2)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#3 NERIDA SOLIVEN</h2>
+<p class="location">LA UNION</p>
+<div class="photo"><img src="candidate3.jpg" alt="Nerida Soliven"></div>
+<p class="votes">Votes: <strong id="votes3">0</strong></p>
+<button onclick="vote(3)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#4 LILY ABAN</h2>
+<p class="location">PANGASINAN</p>
+<div class="photo"><img src="candidate4.jpg" alt="Lily Aban"></div>
+<p class="votes">Votes: <strong id="votes4">0</strong></p>
+<button onclick="vote(4)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#5 SHIRLEY MAE PARAGON</h2>
+<p class="location">ABRA</p>
+<div class="photo"><img src="candidate5.jpg" alt="Shirley Mae Paragon"></div>
+<p class="votes">Votes: <strong id="votes5">0</strong></p>
+<button onclick="vote(5)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#6 LORNA AGAMOS</h2>
+<p class="location">KALINGA</p>
+<div class="photo"><img src="candidate6.jpg" alt="Lorna Agamos"></div>
+<p class="votes">Votes: <strong id="votes6">0</strong></p>
+<button onclick="vote(6)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#7 SHANE FARAWE</h2>
+<p class="location">MOUNTAIN PROVINCE</p>
+<div class="photo"><img src="candidate7.jpg" alt="Shane Farawe"></div>
+<p class="votes">Votes: <strong id="votes7">0</strong></p>
+<button onclick="vote(7)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#8 ELIZABETH HENDERSON</h2>
+<p class="location">BAGUIO – BENGUET</p>
+<div class="photo"><img src="candidate8.jpg" alt="Elizabeth Henderson"></div>
+<p class="votes">Votes: <strong id="votes8">0</strong></p>
+<button onclick="vote(8)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#9 ANA PARAN</h2>
+<p class="location">ISABELA</p>
+<div class="photo"><img src="candidate9.jpg" alt="Ana Paran"></div>
+<p class="votes">Votes: <strong id="votes9">0</strong></p>
+<button onclick="vote(9)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#10 JOY PRINCESS ALARCON</h2>
+<p class="location">CAGAYAN</p>
+<div class="photo"><img src="candidate10.jpg" alt="Joy Princess Alarcon"></div>
+<p class="votes">Votes: <strong id="votes10">0</strong></p>
+<button onclick="vote(10)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#11 MARISTELLA BUENAVISTA</h2>
+<p class="location">TUGUEGARAO CITY</p>
+<div class="photo"><img src="candidate11.jpg" alt="Maristella Buenavista"></div>
+<p class="votes">Votes: <strong id="votes11">0</strong></p>
+<button onclick="vote(11)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#12 GEORGIA SALVE</h2>
+<p class="location">NUEVA VIZCAYA</p>
+<div class="photo"><img src="candidate12.jpg" alt="Georgia Salve"></div>
+<p class="votes">Votes: <strong id="votes12">0</strong></p>
+<button onclick="vote(12)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#13 TRISHA MELENDEZ</h2>
+<p class="location">TARLAC</p>
+<div class="photo"><img src="candidate13.jpg" alt="Trisha Melendez"></div>
+<p class="votes">Votes: <strong id="votes13">0</strong></p>
+<button onclick="vote(13)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
+<h2>#14 CHLOE MATILDE CASTILLO</h2>
+<p class="location">ZAMBALES</p>
+<div class="photo"><img src="candidate14.jpg" alt="Chloe Matilde Castillo"></div>
+<p class="votes">Votes: <strong id="votes14">0</strong></p>
+<button onclick="vote(14)">VOTE NOW</button>
+</div>
+
+<div class="candidate">
 <h2>#15 RICCA AMADOR</h2>
 <p class="location">APAYAO</p>
 <div class="photo"><img src="candidate15.jpg" alt="Ricca Amador"></div>
@@ -58,7 +271,7 @@ footer{background:#6a1b9a;color:white;text-align:center;padding:25px}
 <section class="leaderboard">
 <h2>🏆 CURRENT LEADERBOARD</h2>
 <div id="leaderboardList">
-<p style="text-align:center;">Loading latest results...</p>
+<p style="text-align:center;">Loading latest voting results...</p>
 </div>
 </section>
 
@@ -66,102 +279,132 @@ footer{background:#6a1b9a;color:white;text-align:center;padding:25px}
 <p>© 2026 Little Miss Ilocandia | Online Voting</p>
 <p>₱1 = 1 Vote</p>
 </footer>
+
 <script>
-const formLink = "https://docs.google.com/forms/d/e/1FAIpQLSdYcq9Fsrg3RpFhS9v2HvxOs46MVuvRJkmtZ4TXmzvQW7QvDw/viewform?usp=pp_url";
 
-function vote(candidate) {
-    const names = {
-        1:"LEONOR TAMBAN",
-        2:"VANESSA CASTILLO",
-        3:"NERIDA SOLIVEN",
-        4:"LILY ABAN",
-        5:"SHIRLEY MAE PARAGON",
-        6:"LORNA AGAMOS",
-        7:"SHANE FARAWE",
-        8:"ELIZABETH HENDERSON",
-        9:"ANA PARAN",
-        10:"JOY PRINCESS ALARCON",
-        11:"MARISTELLA BUENAVISTA",
-        12:"GEORGIA SALVE",
-        13:"TRISHA MELENDEZ",
-        14:"CHLOE MATILDE CASTILLO",
-        15:"RICCA AMADOR"
-    };
+const formLink =
+"https://docs.google.com/forms/d/e/1FAIpQLSdYcq9Fsrg3RpFhS9v2HvxOs46MVuvRJkmtZ4TXmzvQW7QvDw/viewform?usp=pp_url";
 
-    const selected = "Candidate #" + candidate + " – " + names[candidate];
+const names = {
+1:"LEONOR TAMBAN",
+2:"VANESSA CASTILLO",
+3:"NERIDA SOLIVEN",
+4:"LILY ABAN",
+5:"SHIRLEY MAE PARAGON",
+6:"LORNA AGAMOS",
+7:"SHANE FARAWE",
+8:"ELIZABETH HENDERSON",
+9:"ANA PARAN",
+10:"JOY PRINCESS ALARCON",
+11:"MARISTELLA BUENAVISTA",
+12:"GEORGIA SALVE",
+13:"TRISHA MELENDEZ",
+14:"CHLOE MATILDE CASTILLO",
+15:"RICCA AMADOR"
+};
 
-    window.open(
-        formLink + "&entry.1730127253=" + encodeURIComponent(selected),
-        "_blank"
-    );
+function vote(number){
+
+const selected =
+"Candidate #" + number + " – " + names[number];
+
+const link =
+formLink +
+"&entry.1730127253=" +
+encodeURIComponent(selected);
+
+window.open(link,"_blank");
 }
 
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSVG1EYCZWTFo2XHu6lfRtx61E24D_L_qkpMYHFUK8zSgfBbIHEV1qT2sZYzrI3apIgXCFJOfltCzkB/pub?gid=2100226735&single=true&output=csv";
+const sheetURL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vSVG1EYCZWTFo2XHu6lfRtx61E24D_L_qkpMYHFUK8zSgfBbIHEV1qT2sZYzrI3apIgXCFJOfltCzkB/pub?gid=2100226735&single=true&output=csv";
 
-async function updateLeaderboard() {
-    try {
-        const response = await fetch(sheetURL + "&t=" + Date.now());
-        const csv = await response.text();
+async function updateLeaderboard(){
 
-        const rows = csv.trim().split(/\r?\n/);
-        let ranking = [];
+try{
 
-        for (let i = 1; i < rows.length; i++) {
-            const row = rows[i].split(",");
+const response =
+await fetch(sheetURL + "&t=" + Date.now());
 
-            if (!row[0]) continue;
+const csv =
+await response.text();
 
-            const match = row[0].match(/Candidate #(\d+)\s*[–-]\s*(.+)/);
+const rows =
+csv.trim().split(/\r?\n/);
 
-            if (!match) continue;
+let ranking=[];
 
-            ranking.push({
-                number: parseInt(match[1]),
-                name: match[2].trim(),
-                votes: parseInt(row[1]) || 0
-            });
-        }
+for(let i=1;i<rows.length;i++){
 
-        ranking.sort((a,b) => b.votes - a.votes);
+const row=rows[i].split(",");
 
-        let html = "";
+if(!row[0]) continue;
 
-        ranking.forEach((candidate,index) => {
-            let medal = "🏅";
+const match =
+row[0].match(/Candidate #(\d+)\s*[–-]\s*(.+)/);
 
-            if(index === 0) medal = "🥇";
-            if(index === 1) medal = "🥈";
-            if(index === 2) medal = "🥉";
+if(!match) continue;
 
-            html += `
-            <div class="rank">
-                ${medal} ${index + 1}. Candidate #${candidate.number}
-                — ${candidate.name}
-                — <strong>${candidate.votes} votes</strong>
-            </div>`;
-        });
+ranking.push({
+number:parseInt(match[1]),
+name:match[2].trim(),
+votes:parseInt(row[1])||0
+});
 
-        document.getElementById("leaderboardList").innerHTML =
-            html || "<p style='text-align:center;'>No votes yet.</p>";
+}
 
-        ranking.forEach(candidate => {
-            const voteElement =
-                document.getElementById("votes" + candidate.number);
+ranking.sort((a,b)=>b.votes-a.votes);
 
-            if(voteElement) {
-                voteElement.textContent = candidate.votes;
-            }
-        });
+let html="";
 
-    } catch(error) {
-        console.error(error);
-        document.getElementById("leaderboardList").innerHTML =
-            "<p style='text-align:center;color:#d81b60;'>Unable to load latest voting results.</p>";
-    }
+ranking.forEach((candidate,index)=>{
+
+let medal="🏅";
+
+if(index===0) medal="🥇";
+if(index===1) medal="🥈";
+if(index===2) medal="🥉";
+
+html+=`
+<div class="rank">
+${medal} ${index+1}.
+Candidate #${candidate.number}
+— ${candidate.name}
+— <strong>${candidate.votes} votes</strong>
+</div>
+`;
+
+});
+
+document.getElementById("leaderboardList").innerHTML =
+html || "<p style='text-align:center;'>No votes yet.</p>";
+
+ranking.forEach(candidate=>{
+
+const element =
+document.getElementById("votes"+candidate.number);
+
+if(element){
+element.textContent=candidate.votes;
+}
+
+});
+
+}catch(error){
+
+console.error(error);
+
+document.getElementById("leaderboardList").innerHTML =
+"<p style='text-align:center;color:#d81b60;'>Unable to load latest voting results.</p>";
+
+}
+
 }
 
 updateLeaderboard();
-setInterval(updateLeaderboard, 10000);
+
+setInterval(updateLeaderboard,10000);
+
 </script>
 
 </body>
