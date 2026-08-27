@@ -394,9 +394,12 @@ async function updateLeaderboard() {
                 continue;
             }
 
+            const candidateNumber = parseInt(match[1]);
+            const candidateName = match[2].trim();
+
             ranking.push({
-                number: parseInt(match[1]),
-                name: match[2].trim(),
+                number: candidateNumber,
+                name: candidateName,
                 votes: totalVotes
             });
         }
@@ -411,9 +414,13 @@ async function updateLeaderboard() {
 
             let medal = "🏅";
 
-            if (index === 0) medal = "🥇";
-            else if (index === 1) medal = "🥈";
-            else if (index === 2) medal = "🥉";
+            if (index === 0) {
+                medal = "🥇";
+            } else if (index === 1) {
+                medal = "🥈";
+            } else if (index === 2) {
+                medal = "🥉";
+            }
 
             html += `
                 <div class="rank">
@@ -423,16 +430,21 @@ async function updateLeaderboard() {
                     — <strong>${candidate.votes} votes</strong>
                 </div>
             `;
+        });
 
-            const voteElement =
-                document.getElementById("votes" + candidate.number);
+        document.getElementById("leaderboardList").innerHTML = html;
+
+        ranking.forEach(function(candidate) {
+
+            const voteElement = document.getElementById(
+                "votes" + candidate.number
+            );
 
             if (voteElement) {
                 voteElement.textContent = candidate.votes;
             }
-        });
 
-        document.getElementById("leaderboardList").innerHTML = html;
+        });
 
     } catch (error) {
 
