@@ -602,172 +602,346 @@ async function updateLeaderboard(){
         const response = await fetch(sheetURL + "&t=" + Date.now());
 
         if (!response.ok) {
-            throw new Error("Unable to access Google Sheet");
+            throw new Error("Google Sheet could not be loaded.");
         }
 
         const csv = await response.text();
 
-        const rows = csv.trim().split(/\r?\n/);
+        /*
+         * Parse CSV correctly.
+         * This handles quoted cells and commas inside cells.
+         */
+        function parseCSVLine(line) {
 
-        let totals = {};
+            const result = [];
+            let current = "";
+            let insideQuotes = false;
 
-        // 15 candidates start at 0
+            for (let i = 0; i < line.length; i++) {
+
+                const char = line[i];
+
+                if (char === '"') {
+
+                    if (
+                        insideQuotes &&
+                        line[i + 1] === '"'
+                    ) {
+                        current += '"';
+                        i++;
+                    } else {
+                        insideQuotes = !insideQuotes;
+                    }
+
+                } else if (
+                    char === "," &&
+                    !insideQuotes
+                ) {
+
+                    result.push(current);
+                    current = "";
+
+                } else {
+
+                    current += char;
+
+                }
+            }
+
+            result.push(current);
+
+            return result;
+
+        }
+
+
+        /*
+         * Split rows.
+         */
+        const rows =
+            csv.trim().split(/\r?\n/);
+
+
+        /*
+         * Start every candidate at zero.
+         */
+        const totals = {};
+
         for (let i = 1; i <= 15; i++) {
             totals[i] = 0;
         }
 
-        // READ GOOGLE SHEET
-        for (let i = 1; i < rows.length; i++) {
 
-            // Correctly handle commas inside Google Sheet fields
-            const columns = rows[i].match(
-                /(".*?"|[^",]+)(?=\s*,|\s*$)/g
-            );
+        /*
+         * READ GOOGLE SHEET
+         *
+         * Column 2 = Candidate
+         * Column 5 = Number of Votes
+         */
+        for (
+            let i = 1;
+            i < rows.length;
+            i++
+        ) {
 
-            if (!columns || columns.length < 5) continue;
+            const columns =
+                parseCSVLine(rows[i]);
+
+            if (columns.length < 5) {
+                continue;
+            }
+
 
             const candidateText =
                 columns[1]
-                .replace(/^"|"$/g, "")
-                .trim();
+                    .trim()
+                    .replace(/^"|"$/g, "");
+
+
+            const voteText =
+                columns[4]
+                    .trim()
+                    .replace(/^"|"$/g, "");
+
+
+            /*
+             * Find candidate number.
+             *
+             * Works with:
+             * Candidate #1 – LEONOR TAMBAN
+             * Candidate #2 – VANESSA CASTILLO
+             * etc.
+             */
+            const match =
+                candidateText.match(
+                    /Candidate\s*#\s*(\d+)/i
+                );
+
+
+            if (!match) {
+                continue;
+            }
+
+
+            const candidateNumber =
+                parseInt(match[1], 10);
+
 
             const numberOfVotes =
                 parseInt(
-                    columns[4]
-                    .replace(/^"|"$/g, "")
-                    .trim()
+                    voteText.replace(/[^0-9]/g, ""),
+                    10
                 ) || 0;
 
-            const match =
-                candidateText.match(/Candidate\s*#(\d+)/i);
-
-            if (!match) continue;
-
-            const candidateNumber =
-                parseInt(match[1]);
 
             if (
                 candidateNumber >= 1 &&
                 candidateNumber <= 15
             ) {
 
-                totals[candidateNumber] += numberOfVotes;
+                totals[candidateNumber] +=
+                    numberOfVotes;
 
             }
+
         }
 
-        // CREATE RANKING
+
+        /*
+         * CREATE RANKING
+         */
         let ranking = [];
 
         for (let i = 1; i <= 15; i++) {
 
             ranking.push({
+
                 number: i,
-                name: candidateNames[i],
-                votes: totals[i]
+
+                name:
+                    candidateNames[i],
+
+                votes:
+                    totals[i]
+
             });
 
         }
 
+
+        /*
+         * SORT HIGHEST TO LOWEST
+         */
         ranking.sort(function(a, b) {
+
             return b.votes - a.votes;
+
         });
 
 
-        // TOP 3
+        /*
+         * TOP 3
+         */
         let topHTML = "";
 
-        ranking.slice(0, 3).forEach(function(candidate, index) {
+        ranking
+            .slice(0, 3)
+            .forEach(function(candidate, index) {
 
-            let medal = "🏅";
+                let medal = "🏅";
 
-            if (index === 0) medal = "🥇";
-            if (index === 1) medal = "🥈";
-            if (index === 2) medal = "🥉";
+                if (index === 0) {
+                    medal = "🥇";
+                }
 
-            topHTML += `
-                <div class="top-card">
-                    <div class="medal">${medal}</div>
+                if (index === 1) {
+                    medal = "🥈";
+                }
 
-                    <div class="rank-number">
-                        TOP ${index + 1}
+                if (index === 2) {
+                    medal = "🥉";
+                }
+
+
+                topHTML += `
+
+                    <div class="top-card">
+
+                        <div class="medal">
+                            ${medal}
+                        </div>
+
+                        <div class="rank-number">
+                            TOP ${index + 1}
+                        </div>
+
+                        <div class="top-name">
+                            Candidate #${candidate.number}
+                            <br>
+                            ${candidate.name}
+                        </div>
+
+                        <div class="top-votes">
+                            ${candidate.votes} votes
+                        </div>
+
                     </div>
 
-                    <div class="top-name">
-                        Candidate #${candidate.number}
-                        <br>
-                        ${candidate.name}
-                    </div>
+                `;
 
-                    <div class="top-votes">
-                        ${candidate.votes} votes
-                    </div>
-                </div>
-            `;
+            });
 
-        });
 
         document.getElementById("top3").innerHTML =
             topHTML;
 
 
-        // FULL LEADERBOARD
+        /*
+         * FULL LEADERBOARD
+         */
         let html = "";
 
         ranking.forEach(function(candidate, index) {
 
             let medal = "🏅";
 
-            if (index === 0) medal = "🥇";
-            else if (index === 1) medal = "🥈";
-            else if (index === 2) medal = "🥉";
+            if (index === 0) {
+                medal = "🥇";
+            }
+
+            else if (index === 1) {
+                medal = "🥈";
+            }
+
+            else if (index === 2) {
+                medal = "🥉";
+            }
+
 
             let className = "rank";
+
 
             if (index === 0) {
                 className += " top-one";
             }
 
+
             html += `
+
                 <div class="${className}">
+
                     ${medal}
+
                     ${index + 1}.
+
                     Candidate #${candidate.number}
+
                     — ${candidate.name}
+
                     —
-                    <strong>${candidate.votes} votes</strong>
+
+                    <strong>
+                        ${candidate.votes} votes
+                    </strong>
+
                 </div>
+
             `;
 
         });
 
-        document.getElementById("leaderboardList").innerHTML =
-            html;
+
+        document.getElementById(
+            "leaderboardList"
+        ).innerHTML = html;
 
 
-        // UPDATE CANDIDATE CARDS
+        /*
+         * UPDATE VOTE NUMBERS
+         * ON EACH CANDIDATE CARD
+         */
         for (let i = 1; i <= 15; i++) {
 
             const element =
-                document.getElementById("votes" + i);
+                document.getElementById(
+                    "votes" + i
+                );
+
 
             if (element) {
-                element.textContent = totals[i];
+
+                element.textContent =
+                    totals[i];
+
             }
 
         }
+
+
+        /*
+         * SHOW LAST UPDATE TIME
+         */
+        console.log(
+            "Leaderboard updated:",
+            new Date().toLocaleTimeString()
+        );
+
 
     }
 
     catch (error) {
 
         console.error(
-            "Unable to load voting results:",
+            "Leaderboard error:",
             error
         );
 
-        document.getElementById("leaderboardList").innerHTML =
-            "<p style='text-align:center;color:#d81b60;'>Unable to load latest voting results.</p>";
+
+        document.getElementById(
+            "leaderboardList"
+        ).innerHTML =
+
+            "<p style='text-align:center;color:#d81b60;'>Unable to load latest voting results. Please refresh the page.</p>";
 
     }
 
